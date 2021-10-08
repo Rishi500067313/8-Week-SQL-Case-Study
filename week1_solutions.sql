@@ -10,3 +10,10 @@
      WHERE order_date = (SELECT min(order_date) 
                             FROM dannys_diner.sales)
      GROUP BY customer_id, product_id;
+
+4. SELECT me.product_name, COUNT(s.product_id) AS count1
+     FROM dannys_diner.sales s 
+         JOIN dannys_diner.menu me ON s.product_id = me.product_id
+     GROUP BY product_name
+     ORDER BY count1 DESC
+     LIMIT 1;
