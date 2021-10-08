@@ -5,3 +5,8 @@
      
 2. SELECT customer_id, COUNT(DISTINCT(order_date)) FROM dannys_diner.sales GROUP BY customer_id;
 
+3. SELECT DISTINCT(customer_id), product_id
+     FROM dannys_diner.sales
+     WHERE order_date = (SELECT min(order_date) 
+                            FROM dannys_diner.sales)
+     GROUP BY customer_id, product_id;
