@@ -41,7 +41,7 @@
 	WHERE join_date > order_date) a
    WHERE rn = 1
 
-8. with cte as (
+9. with cte as (
     select
         customer_id, product_id, count(product_id) as con
     from dannys_diner.sales
@@ -56,3 +56,22 @@
 	   end) as points
    from cte
    group by customer_id
+
+10.
+	with cte as (
+	    select customer_id, product_id, count(product_id) as con
+	    from week1_case.sales
+	    group by customer_id, product_id
+	)
+	
+	select
+	    c.customer_id,
+	    sum(case
+	            when c.product_id = '1' and date_add(join_date, interval 7 day) < s.order_date then con * 20
+	            when c.product_id <> '1' and date_add(join_date, interval 7 day) < s.order_date then con * 20
+	            else con * 10
+	        end) as points
+	from cte c
+	join week1_case.members m on c.customer_id = m.customer_id
+	join week1_case.sales s on c.customer_id = s.customer_id
+	group by c.customer_id;
