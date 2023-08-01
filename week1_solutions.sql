@@ -35,4 +35,24 @@
 	WHERE join_date < order_date) a
    WHERE rn = 1
 
-7.
+7. SELECT customer_id, product_id FROM (
+	SELECT s.customer_id, product_id, row_number() over(partition by s.customer_id ORDER BY order_date) AS rn 
+	FROM dannys_diner.sales s LEFT JOIN dannys_diner.members m on s.customer_id = m.customer_id
+	WHERE join_date > order_date) a
+   WHERE rn = 1
+
+8. with cte as (
+    select
+        customer_id, product_id, count(product_id) as con
+    from dannys_diner.sales
+    group by customer_id, product_id
+    )
+	
+   select
+       customer_id,
+       sum(case
+	       when product_id = '1' then con * 20
+	       else con * 10
+	   end) as points
+   from cte
+   group by customer_id
