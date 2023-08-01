@@ -18,4 +18,15 @@
      ORDER BY count1 DESC
      LIMIT 1;
      
-5. 
+5. SELECT customer_id, product_id FROM (
+	SELECT
+		s.customer_id,
+		s.product_id,
+		SUM(m.product_id) AS fav_count,
+		ROW_NUMBER() over(partition by customer_id ORDER BY sum(m.product_id) DESC) AS rn
+	FROM week1_case.sales s
+	LEFT JOIN week1_case.menu m ON s.product_id = m.product_id
+	GROUP BY s.customer_id,s.product_id) a
+   WHERE rn = 1
+     
+6.
