@@ -29,4 +29,10 @@
 	GROUP BY s.customer_id,s.product_id) a
    WHERE rn = 1
      
-6.
+6. SELECT customer_id, product_id FROM (
+	SELECT s.customer_id, product_id, row_number() over(partition by s.customer_id ORDER BY order_date) AS rn 
+	FROM dannys_diner.sales s LEFT JOIN dannys_diner.members m on s.customer_id = m.customer_id
+	WHERE join_date < order_date) a
+   WHERE rn = 1
+
+7.
