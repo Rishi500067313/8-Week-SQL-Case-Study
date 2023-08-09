@@ -9,4 +9,13 @@
    where NULLIF(r.cancellation,'null') is NULL
    group by pizza_id
 
-5. 
+5. select customer_id, 
+       case when pizza_id = 1 then 'Meat Lovers'
+            else 'Vegetarian'
+       end,
+       count(1)
+  from pizza_runner.customer_orders 
+  group by customer_id , pizza_id 
+  order by customer_id , pizza_id
+
+6.
