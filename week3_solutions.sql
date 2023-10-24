@@ -41,3 +41,13 @@ select plan_name,
 from foodie_fi.subscriptions join foodie_fi.plans using (plan_id) 
 where plan_name not in ('trial') 
 group by plan_name
+
+with base_query as (
+select *, 
+       row_number() over(partition by customer_id order by customer_id, start_date) as rn 
+from foodie_fi.subscriptions join foodie_fi.plans using (plan_id) 
+where year(start_date) = 2020 and plan_name in ('basic monthly','pro monthly')
+)
+
+select count(customer_id) as count from base_query where rn = 2 and plan_name in ('basic monthly');
+
